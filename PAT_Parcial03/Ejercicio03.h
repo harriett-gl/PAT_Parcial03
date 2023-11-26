@@ -3,15 +3,20 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <map>>
 
 using std::string;
-using namespace std;
+using std::unordered_map;
+using std::vector;
 
 class TimeMap
 {
 private:
-	unordered_map<string, vector<pair<int, string>> > mp;
+	struct Pair {
+		int timestamp;
+		string value;
+	};
+
+	unordered_map<string, vector<Pair*>>* map;
 
 public:
 	TimeMap();
@@ -19,5 +24,7 @@ public:
 	void set(string key, string value, int timestamp);
 
 	string get(string key, int timestamp);
-};
 
+	// esto es de javascript
+	~TimeMap();
+};

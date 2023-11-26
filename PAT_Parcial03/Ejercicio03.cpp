@@ -1,30 +1,55 @@
 #include "Ejercicio03.h"
+#include <map>
+#include <iterator>
 
 TimeMap::TimeMap()
 {
+    map = new unordered_map<string, vector<Pair*>>();
 }
 
 void TimeMap::set(string key, string value, int timestamp)
 {
-    if (data.find(key) == data.end()) {
-        std::map<int, std::string> timestampMap;
-        timestampMap[timestamp] = value;
-        data[key] = timestampMap;
-    }
-    else {
-        data[key][timestamp] = value;
-    }
+    (*map)[key].emplace_back(new Pair{ timestamp, value });
 }
 
 string TimeMap::get(string key, int timestamp)
 {
-    if (data.find(key) != data.end()) {
-        auto& timestampMap = data[key];
-        auto it = timestampMap.upper_bound(timestamp);
-        if (it != timestampMap.begin()) {
-            --it;
-            return it->second;
+    if (map->find(key) == map->end())
+        return "";
+
+    vector<Pair*> values = (*map)[key];
+
+    unsigned int top = values.size();
+    unsigned int bottom = 0;
+    unsigned int middle;
+
+    if (values[bottom]->timestamp > timestamp)
+        return "";
+
+    if (values[top - 1]->timestamp <= timestamp)
+        return values[top - 1]->value;
+
+    while (bottom < top) {
+        middle = (top + bottom) >> 1;
+
+        if (values[middle]->timestamp == timestamp)
+            return values[middle]->value;
+
+        if (values[middle]->timestamp < timestamp)
+            bottom = middle + 1;
+        else
+            top = middle;
+    }
+
+    return values[middle]->value;
+}
+
+TimeMap::~TimeMap()
+{
+    for (auto& entry : *map) {
+        for (auto& pair : entry.second) {
+            delete pair;
         }
     }
-    return "";
+    delete map;
 }
