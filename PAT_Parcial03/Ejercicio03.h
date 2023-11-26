@@ -11,12 +11,12 @@ using std::vector;
 class TimeMap
 {
 private:
-	struct Pair {
-		int timestamp;
-		string value;
+	struct Mapa {
+		int tiempo;
+		string valor;
 	};
 
-	unordered_map<string, vector<Pair*>>* map;
+	unordered_map<string, vector<Mapa*>>* mapita;
 
 public:
 	TimeMap();
@@ -25,6 +25,5 @@ public:
 
 	string get(string key, int timestamp);
 
-	// esto es de javascript
 	~TimeMap();
 };
