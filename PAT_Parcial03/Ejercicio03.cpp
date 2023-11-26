@@ -6,26 +6,25 @@ TimeMap::TimeMap()
 
 void TimeMap::set(string key, string value, int timestamp)
 {
-	mp[key].push_back({ timestamp, value });
+    if (data.find(key) == data.end()) {
+        std::map<int, std::string> timestampMap;
+        timestampMap[timestamp] = value;
+        data[key] = timestampMap;
+    }
+    else {
+        data[key][timestamp] = value;
+    }
 }
 
 string TimeMap::get(string key, int timestamp)
 {
-    if (mp.find(key) == mp.end())    return "";
-    else if (mp[key][0].first > timestamp)   return "";
-    else {
-        int n = mp[key].size();
-        int low = 0, high = n - 1;
-        int resPos = -1;
-
-        while (low <= high) {
-            int mid = low + (high - low) / 2;
-            int ts = mp[key][mid].first;
-
-            if (ts > timestamp) high = mid - 1;
-            else resPos = mid, low = mid + 1;
+    if (data.find(key) != data.end()) {
+        auto& timestampMap = data[key];
+        auto it = timestampMap.upper_bound(timestamp);
+        if (it != timestampMap.begin()) {
+            --it;
+            return it->second;
         }
-
-        return resPos == -1 ? "" : mp[key][resPos].second;
     }
+    return "";
 }
