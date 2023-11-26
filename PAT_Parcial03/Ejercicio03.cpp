@@ -52,4 +52,4 @@ TimeMap::~TimeMap()
         }
     }
     delete map;
-}}
+}
