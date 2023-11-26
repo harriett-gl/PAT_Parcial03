@@ -11,12 +11,12 @@ using std::vector;
 class TimeMap
 {
 private:
-	struct Mapa {
-		int tiempo;
-		string valor;
+	struct Pair {
+		int timestamp;
+		string value;
 	};
 
-	unordered_map<string, vector<Mapa*>>* mapita;
+	unordered_map<string, vector<Pair*>>* map;
 
 public:
 	TimeMap();

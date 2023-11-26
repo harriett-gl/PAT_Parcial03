@@ -4,52 +4,52 @@
 
 TimeMap::TimeMap()
 {
-    mapita = new unordered_map<string, vector<Mapa*>>();
+    map = new unordered_map<string, vector<Pair*>>();
 }
 
 void TimeMap::set(string key, string value, int timestamp)
 {
-    (*mapita)[key].emplace_back(new Mapa{ timestamp, value });
+    (*map)[key].emplace_back(new Pair{ timestamp, value });
 }
 
 string TimeMap::get(string key, int timestamp)
 {
-    if (mapita->find(key) == mapita->end())
+    if (map->find(key) == map->end())
         return "";
 
-    vector<Mapa*> valores = (*mapita)[key];
+    vector<Pair*> values = (*map)[key];
 
-    unsigned int top = valores.size();
+    unsigned int top = values.size();
     unsigned int bottom = 0;
     unsigned int middle;
 
-    if (valores[bottom]->tiempo > timestamp)
+    if (values[bottom]->timestamp > timestamp)
         return "";
 
-    if (valores[top - 1]->tiempo <= timestamp)
-        return values[top - 1]->valor;
+    if (values[top - 1]->timestamp <= timestamp)
+        return values[top - 1]->value;
 
     while (bottom < top) {
         middle = (top + bottom) >> 1;
 
-        if (valores[middle]->tiempo == timestamp)
-            return values[middle]->valor;
+        if (values[middle]->timestamp == timestamp)
+            return values[middle]->value;
 
-        if (valores[middle]->tiempo < timestamp)
+        if (values[middle]->timestamp < timestamp)
             bottom = middle + 1;
         else
             top = middle;
     }
 
-    return valores[middle]->valor;
+    return values[middle]->value;
 }
 
 TimeMap::~TimeMap()
 {
-    for (auto& entry : *mapita) {
-        for (auto& mapa : entry.second) {
-            delete mapa;
+    for (auto& entry : *map) {
+        for (auto& pair : entry.second) {
+            delete pair;
         }
     }
-    delete mapita;
-}
+    delete map;
+}}
